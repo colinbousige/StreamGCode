@@ -1,3 +1,4 @@
+# run with: streamlit run GCode.py
 import streamlit as st
 import numpy as np
 # matplotlib: plot
@@ -198,10 +199,15 @@ def writeout():
     GCODE += "\n"
     GCODE += ";fin du GCODE init\n"
     GCODE += "\n"
-    for couche in range(GP.couche):
+    for couche in range(1, GP.couche+1):
+        if len(text_to_add)>0:
+            if couche >= Ntext_start:
+                if (couche-Ntext_start) % Ntext == 0:
+                    GCODE += "; Additional text:\n"
+                    GCODE += text_to_add+"\n"
         for souscouche in range(len(GP.X)):
             x, y = np.round(GP.X[souscouche], 4), np.round(GP.Y[souscouche], 4)
-            GCODE += "G1 F33000 X"+str(x[0])+" Y"+str(y[0])+" ; Couche "+str(couche+1)+ \
+            GCODE += "G1 F33000 X"+str(x[0])+" Y"+str(y[0])+" ; Couche "+str(couche)+ \
                     "/"+str(GP.couche)+" - Sous couche "+str(souscouche+1)+"/"+str(len(GP.X))+"\n"
             for i in range(1,len(x)):
                 GCODE += "G1 X"+str(x[i])+" Y"+str(y[i])+"\n"
@@ -236,45 +242,61 @@ col1, col2 = st.sidebar.columns(2); cols = st.sidebar.columns(Nsub)
 col1.write("### Line length (mm)")
 length = [float(x.text_input(f"Sublayer #{i+1}", value="200", key=f"length{i}"))
         for i, x in enumerate(cols)]
+
 col1, col2 = st.sidebar.columns(2); cols = st.sidebar.columns(Nsub)
 col1.write("### Step (mm)")
 step = [float(x.text_input(f"Sublayer #{i+1}", value="10", key=f"step{i}"))
         for i, x in enumerate(cols)]
+
 col1, col2 = st.sidebar.columns(2); cols = st.sidebar.columns(Nsub)
 col1.write("### Number of lines per sublayer")
 Nline = [int(x.text_input(f"Sublayer #{i+1}", value="10", key=f"Nline{i}"))
         for i, x in enumerate(cols)]
+
 col1, col2 = st.sidebar.columns(2); cols = st.sidebar.columns(Nsub)
 col1.write("### Angle")
 angle = [float(x.text_input(f"Sublayer #{i+1}", value=str(0+i*30), key=f"angle{i}"))
          for i, x in enumerate(cols)]
+
 col1, col2 = st.sidebar.columns(2); cols = st.sidebar.columns(Nsub)
 col1.write("### Shift in X of each sublayer(mm)")
 shiftX = [float(x.text_input(f"Sublayer #{i+1}", value="0", key=f"shiftX{i}"))
          for i, x in enumerate(cols)]
+
 col1, col2 = st.sidebar.columns(2); cols = st.sidebar.columns(Nsub)
 col1.write("### Shift in Y of each sublayer (mm)")
 shiftY = [float(x.text_input(f"Sublayer #{i+1}", value="0", key=f"shiftY{i}"))
           for i, x in enumerate(cols)]
+
 col1, col2 = st.sidebar.columns(2); cols = st.sidebar.columns(Nsub)
 col1.write("### Add a point to sublayer (X coordinates)")
 ADDX = [float(x.text_input(f"Sublayer #{i+1}", value="0", key=f"ADDX{i}"))
           for i, x in enumerate(cols)]
+
 col1, col2 = st.sidebar.columns(2); cols = st.sidebar.columns(Nsub)
 col1.write("### Add a point to sublayer (Y coordinates)")
 ADDY = [float(x.text_input(f"Sublayer #{i+1}", value="0", key=f"ADDY{i}"))
           for i, x in enumerate(cols)]
+
 col1, col2 = st.sidebar.columns(2); cols = st.sidebar.columns(2)
 col1.write("### Shift of the whole pattern")
 centershift = cols[0].number_input("Shift X",0), cols[1].number_input("Shift Y",0)
-col1, col2 = st.sidebar.columns([2,3])
+
 col1, col2 = st.sidebar.columns(2); cols = st.sidebar.columns(2)
 col1.write("## Ending loops parameters");col2.write("---")
+
 col1, col2 = st.sidebar.columns(2)
 loopdiameter = col1.number_input("Diameter (mm)", value=10)
 looppoints = col2.number_input("Number of points", value=0)
 loopshiftX = col1.number_input("Lateral shift (mm)", value=0)
 loopSkip = col2.number_input("Excluding angle", value=90)
+
+col1, col2 = st.sidebar.columns(2); 
+col1.write("## Add Text every N sublayer")
+col1, col2, col3 = st.sidebar.columns([2,1,1]); 
+text_to_add = col1.text_input("Text:", key="text_to_add")
+Ntext_start = col2.number_input("N start", key="Ntext_start", step=1, value=1, min_value=1)
+Ntext = col3.number_input("N", key="Ntext", step=1, value=1, min_value=1)
 
 update_GP()
 if 'zoom' not in st.session_state:
