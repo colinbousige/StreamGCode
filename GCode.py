@@ -37,6 +37,9 @@ GP.DELTAY = GP.YMAX - GP.YMIN
 # Definition of functions
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # 
 def rotation(X, Y, theta):
+    """
+    Rotates X and Y coordinates from an angle theta
+    """
     global GP
     xx, yy = X - GP.CENTERX, Y - GP.CENTERY
     rotX = GP.CENTERX + xx*np.cos(theta*np.pi/180) + yy*np.sin(theta*np.pi/180)
@@ -45,6 +48,9 @@ def rotation(X, Y, theta):
 
 
 def endloop(x0, y0, x1, y1, nbrpoints=10, diameter=50, ang=10):
+    """
+    Creates a loop at the end of a line to connect 2 lines without sharp angles
+    """
     global GP
     X = np.array([])
     Y = np.array([])
@@ -72,6 +78,9 @@ def endloop(x0, y0, x1, y1, nbrpoints=10, diameter=50, ang=10):
 
 
 def update_GP():
+    """
+    Update the global 'structure' object based on the defined parameters
+    """
     global GP
     GP.couche = int(Nlayers)
     GP.angle = np.asarray(angle)
@@ -154,6 +163,9 @@ def update_GP():
 
 
 def plotstruct(GP, zoom=0):
+    """
+    Plots the define 'structure' object, with option to zoom in or out
+    """
     cmap = cm.RdYlGn_r
     x, y = np.concatenate(GP.X), np.concatenate(GP.Y)
     points = np.array([x, y]).T.reshape(-1, 1, 2)
@@ -162,7 +174,6 @@ def plotstruct(GP, zoom=0):
     z = np.asarray(np.linspace(0.0, 1.0, len(x)))
     lc = LineCollection(segments, array=z, cmap=cmap, norm=norm,linewidth=1.5, alpha=.8)
     f = Figure(figsize=(6, 4), dpi=150)
-    # f.subplots_adjust(left=0.15, bottom=0.15, right=.95, top=.95, wspace=0, hspace=0)
     f.subplots_adjust(left=0, bottom=0, right=1, top=1, wspace=0, hspace=0)
     ax1 = f.add_subplot(1,1,1)
     ax1.add_collection(lc)
@@ -180,6 +191,11 @@ def plotstruct(GP, zoom=0):
 
 
 def writeout():
+    """
+    Function to write GCODE file from a 'structure' object
+    
+    Returns a string
+    """
     global GP
     update_GP()
     GCODE = ""
@@ -206,7 +222,7 @@ def writeout():
     GCODE += "M42 S24 P4\n"
     GCODE += "\n"
     GCODE += "\n"
-    GCODE += ";fin du GCODE init\n"
+    GCODE += "; ----------------- Fin du GCODE init -----------------\n"
     GCODE += "\n"
     for couche in range(1, GP.couche+1):
         if len(text_to_add)>0:
@@ -321,6 +337,11 @@ col1, col2, col3 = st.sidebar.columns([2,1,1]);
 text_to_add = col1.text_area("Text:", key="text_to_add")
 Ntext_start = col2.number_input("N start", key="Ntext_start", step=1, value=1, min_value=1)
 Ntext = col3.number_input("N", key="Ntext", step=1, value=1, min_value=1)
+
+
+# # # # # # # # # # # # # # # # # # # # # # # 
+# Main interface : plot and buttons
+# # # # # # # # # # # # # # # # # # # # # # #
 
 update_GP()
 if 'zoom' not in st.session_state:
