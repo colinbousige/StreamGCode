@@ -294,7 +294,7 @@ loopSkip = col2.number_input("Excluding angle", value=90)
 col1, col2 = st.sidebar.columns(2); 
 col1.write("## Add Text every N sublayer")
 col1, col2, col3 = st.sidebar.columns([2,1,1]); 
-text_to_add = col1.text_input("Text:", key="text_to_add")
+text_to_add = col1.text_area("Text:", key="text_to_add")
 Ntext_start = col2.number_input("N start", key="Ntext_start", step=1, value=1, min_value=1)
 Ntext = col3.number_input("N", key="Ntext", step=1, value=1, min_value=1)
 
