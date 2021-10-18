@@ -132,16 +132,25 @@ def update_GP():
         newY = np.append(newY, newY[-1]+addY[j])
         GP.X.append(newX)
         GP.Y.append(newY)
-        if j > 0:
-            dist0 = np.sqrt((GP.X[j-1][-1]-newX[0])
-                            ** 2 + (GP.Y[j-1][-1]-newY[0])**2)
-            dist1 = np.sqrt((GP.X[j-1][-1]-newX[-1])
-                            ** 2 + (GP.Y[j-1][-1]-newY[-1])**2)
-            if dist0 > dist1:
-                GP.X[j] = np.flipud(newX)
-                GP.Y[j] = np.flipud(newY)
-    GP.X = GP.X + shiftXY[0]
-    GP.Y = GP.Y + shiftXY[1]
+        if mirrorX[j]:
+            for i in range(len(GP.X[j])):
+                if GP.X[j][i] > GP.CENTERX+shiftX[j]:
+                    GP.X[j][i] = GP.X[j][i] - 2 * np.abs(GP.X[j][i] - GP.CENTERX+shiftX[j])
+                    continue
+                if GP.X[j][i] < GP.CENTERX+shiftX[j]:
+                    GP.X[j][i] = GP.X[j][i] + 2 * np.abs(GP.X[j][i] - GP.CENTERX+shiftX[j])
+        if mirrorY[j]:
+            for i in range(len(GP.Y[j])):
+                if GP.Y[j][i] > GP.CENTERY+shiftY[j]:
+                    GP.Y[j][i] = GP.Y[j][i] - 2 * np.abs(GP.Y[j][i] - GP.CENTERY+shiftY[j])
+                    continue
+                if GP.Y[j][i] < GP.CENTERY+shiftY[j]:
+                    GP.Y[j][i] = GP.Y[j][i] + 2 * np.abs(GP.Y[j][i] - GP.CENTERY+shiftY[j])
+        if reverse[j]:
+            GP.X[j] = np.flipud(GP.X[j])
+            GP.Y[j] = np.flipud(GP.Y[j])
+    GP.X = [GP.X[j] + shiftXY[0] for j in range(Nsub)]
+    GP.Y = [GP.Y[j] + shiftXY[1] for j in range(Nsub)]
 
 
 def plotstruct(GP, zoom=0):
@@ -266,6 +275,21 @@ shiftX = [float(x.text_input(f"Sublayer #{i+1}", value="0", key=f"shiftX{i}"))
 col1, col2 = st.sidebar.columns(2); cols = st.sidebar.columns(Nsub)
 col1.write("### Shift in Y of each sublayer (mm)")
 shiftY = [float(x.text_input(f"Sublayer #{i+1}", value="0", key=f"shiftY{i}"))
+          for i, x in enumerate(cols)]
+
+col1, col2 = st.sidebar.columns(2); cols = st.sidebar.columns(Nsub)
+col1.write("### Miror image in X")
+mirrorX = [x.checkbox(f"Sublayer #{i+1}", value=0, key=f"mirrorX{i}")
+          for i, x in enumerate(cols)]
+
+col1, col2 = st.sidebar.columns(2); cols = st.sidebar.columns(Nsub)
+col1.write("### Miror image in Y")
+mirrorY = [x.checkbox(f"Sublayer #{i+1}", value=0, key=f"mirrorY{i}")
+          for i, x in enumerate(cols)]
+
+col1, col2 = st.sidebar.columns(2); cols = st.sidebar.columns(Nsub)
+col1.write("### Inverse points order")
+reverse = [x.checkbox(f"Sublayer #{i+1}", value=0, key=f"reverse{i}")
           for i, x in enumerate(cols)]
 
 col1, col2 = st.sidebar.columns(2); cols = st.sidebar.columns(Nsub)
