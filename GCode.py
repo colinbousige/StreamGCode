@@ -8,7 +8,22 @@ from matplotlib.figure import Figure
 # implement the default mpl key bindings
 from matplotlib.collections import LineCollection
 
-# st.set_page_config(layout="wide")
+st.set_page_config(
+    page_title="GCODE Creator for Electrospinning",
+    page_icon=":hammer_and_pick:",
+    layout="wide",
+    initial_sidebar_state="expanded",
+    menu_items={
+        'Get Help': 'https://lmi.cnrs.fr/author/colin-bousige/',
+        'Report a bug': "https://lmi.cnrs.fr/author/colin-bousige/",
+        'About': """
+        ### GCODE Creator for Electrospinning
+        Version date 2021-10-27.
+
+        This app was made by [Colin Bousige](https://lmi.cnrs.fr/author/colin-bousige/). Contact me for support or to signal a bug.
+        """
+    }
+)
 st.title("GCODE Creator for Electrospinning")
 bt1, bt2 = st.columns(2)
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # 
@@ -350,8 +365,3 @@ if bt1.button("Zoom in/out"):
     st.session_state.zoom = (st.session_state.zoom + 1) % 2
 bt2.download_button('Download GCODE', writeout())
 plotstruct(GP, st.session_state.zoom)
-
-
-st.write("""
-[Colin Bousige ©](https://lmi.cnrs.fr/author/colin-bousige/) – 15/10/2021
-""")
