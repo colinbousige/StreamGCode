@@ -39,10 +39,10 @@ class structure(object):
 
 global GP
 GP = structure('')
-GP.XMAX = 470.
-GP.XMIN = 100.
-GP.YMAX = 500.
-GP.YMIN = 230.
+GP.XMAX = 350.
+GP.XMIN = 50.
+GP.YMAX = 350.
+GP.YMIN = 50.
 GP.CENTERX = (GP.XMAX + GP.XMIN)/2.
 GP.CENTERY = (GP.YMAX + GP.YMIN)/2.
 GP.DELTAX = GP.XMAX - GP.XMIN
