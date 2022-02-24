@@ -1,6 +1,7 @@
 # run with: streamlit run GCode.py
 import streamlit as st
 import numpy as np
+import math
 # matplotlib: plot
 import matplotlib.cm as cm
 import matplotlib.pyplot as plt
@@ -9,7 +10,7 @@ from matplotlib.figure import Figure
 from matplotlib.collections import LineCollection
 
 st.set_page_config(
-    page_title="GCODE Creator for Electrospinning",
+    page_title="Simple G-Code creator for precise Direct-writing",
     page_icon=":hammer_and_pick:",
     layout="wide",
     initial_sidebar_state="expanded",
@@ -17,14 +18,14 @@ st.set_page_config(
         'Get Help': 'https://lmi.cnrs.fr/author/colin-bousige/',
         'Report a bug': "https://lmi.cnrs.fr/author/colin-bousige/",
         'About': """
-        ### GCODE Creator for Electrospinning
-        Version date 2021-10-27.
+        ### Simple G-Code creator for precise Direct-writing
+        Version date 2022-02-24.
 
         This app was made by [Colin Bousige](https://lmi.cnrs.fr/author/colin-bousige/). Contact me for support or to signal a bug.
         """
     }
 )
-st.title("GCODE Creator for Electrospinning")
+st.title("Simple G-Code creator for precise Direct-writing")
 bt1, bt2 = st.columns(2)
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # 
 # Definition of global options
@@ -214,19 +215,19 @@ def writeout():
     global GP
     update_GP()
     GCODE = ""
-    GCODE += "; Nombre de couches        : " +str(Nlayers)+"\n"
-    GCODE += "; Nombre de souscouches    : " +str(Nsub)+"\n"
-    GCODE += "; Longueur de la ligne (mm): " +str(length)+"\n"
-    GCODE += "; Pas (mm)                 : " +str(step)+"\n"
-    GCODE += "; Nombre de lignes         : " +str(Nline)+"\n"
+    GCODE += "; Number of layers         : " +str(Nlayers)+"\n"
+    GCODE += "; Number of sub-layers     : " +str(Nsub)+"\n"
+    GCODE += "; Line length (mm)         : " +str(length)+"\n"
+    GCODE += "; Step (mm)                : " +str(step)+"\n"
+    GCODE += "; Number of lines          : " +str(Nline)+"\n"
     GCODE += "; Angle                    : " +str(angle)+"\n"
     GCODE += "; Shift X (mm)             : " +str(shiftX)+"\n"
     GCODE += "; Shift Y (mm)             : " +str(shiftY)+"\n"
-    GCODE += "; Paramètres des boucles   :\n"
-    GCODE += "; Diamètre                 : " +str(loopdiameter)+"\n"
-    GCODE += "; Nombre de points         : " +str(looppoints)+"\n"
-    GCODE += "; Décalage en X            : " +str(loopshiftX)+"\n"
-    GCODE += "; Angle d'exclusion de points: " +str(loopSkip)+"\n"
+    GCODE += "; Loop parameters          :\n"
+    GCODE += "; Diameter                 : " +str(loopdiameter)+"\n"
+    GCODE += "; Number of points         : " +str(looppoints)+"\n"
+    GCODE += "; X shift                  : " +str(loopshiftX)+"\n"
+    GCODE += "; Points exclusion angle   : " +str(loopSkip)+"\n"
     GCODE += "G21 ; set units to millimeters\n"
     GCODE += "M107\n"
     GCODE += "\n"
@@ -237,7 +238,7 @@ def writeout():
     GCODE += "M42 S24 P4\n"
     GCODE += "\n"
     GCODE += "\n"
-    GCODE += "; ----------------- Fin du GCODE init -----------------\n"
+    GCODE += "; ----------------- End of GCODE init -----------------\n"
     GCODE += "\n"
     for couche in range(1, GP.couche+1):
         if len(text_to_add)>0:
@@ -247,8 +248,8 @@ def writeout():
                     GCODE += text_to_add+"\n"
         for souscouche in range(len(GP.X)):
             x, y = np.round(GP.X[souscouche], 4), np.round(GP.Y[souscouche], 4)
-            GCODE += "G1 F33000 X"+str(x[0])+" Y"+str(y[0])+" ; Couche "+str(couche)+ \
-                    "/"+str(GP.couche)+" - Sous couche "+str(souscouche+1)+"/"+str(len(GP.X))+"\n"
+            GCODE += "G1 F33000 X"+str(x[0])+" Y"+str(y[0])+" ; Layer "+str(couche)+ \
+                    "/"+str(GP.couche)+" - Sub Layer "+str(souscouche+1)+"/"+str(len(GP.X))+"\n"
             for i in range(1,len(x)):
                 GCODE += "G1 X"+str(x[i])+" Y"+str(y[i])+"\n"
             GCODE += "\n"
@@ -278,64 +279,131 @@ col1, col2 = st.sidebar.columns(2)
 Nlayers = col1.number_input("Number of layers:", 1, 2000, 1)
 Nsub = col2.number_input("Number of sub-layers:", 1, 20, 1)
 
-col1, col2 = st.sidebar.columns(2); cols = st.sidebar.columns(Nsub)
+col1, col2 = st.sidebar.columns(2); 
 col1.write("### Line length (mm)")
-length = [float(x.text_input(f"Sublayer #{i+1}", value="200", key=f"length{i}"))
-        for i, x in enumerate(cols)]
+nlines = int(Nsub/4) + math.ceil((Nsub % 4)/4)
+length = []
+for line in range(nlines):
+    ncol = min(4, Nsub-line*4)
+    cols = st.sidebar.columns(ncol)
+    length.append([float(x.number_input(f"Sublayer #{i+1+line*4}", value=200, key=f"length{i+line*4}"))
+            for i, x in enumerate(cols)])
+length = [item for sublist in length for item in sublist]
 
-col1, col2 = st.sidebar.columns(2); cols = st.sidebar.columns(Nsub)
+col1, col2 = st.sidebar.columns(2);
 col1.write("### Step (mm)")
-step = [float(x.text_input(f"Sublayer #{i+1}", value="10", key=f"step{i}"))
-        for i, x in enumerate(cols)]
+nlines = int(Nsub/4) + math.ceil((Nsub % 4)/4)
+step = []
+for line in range(nlines):
+    ncol = min(4, Nsub-line*4)
+    cols = st.sidebar.columns(ncol)
+    step.append([float(x.number_input(f"Sublayer #{i+1+line*4}", value=10, key=f"step{i+line*4}"))
+                   for i, x in enumerate(cols)])
+step = [item for sublist in step for item in sublist]
 
-col1, col2 = st.sidebar.columns(2); cols = st.sidebar.columns(Nsub)
+col1, col2 = st.sidebar.columns(2);
 col1.write("### Number of lines per sublayer")
-Nline = [int(x.text_input(f"Sublayer #{i+1}", value="10", key=f"Nline{i}"))
-        for i, x in enumerate(cols)]
+nlines = int(Nsub/4) + math.ceil((Nsub % 4)/4)
+Nline = []
+for line in range(nlines):
+    ncol = min(4, Nsub-line*4)
+    cols = st.sidebar.columns(ncol)
+    Nline.append([int(x.number_input(f"Sublayer #{i+1+line*4}", value=10, key=f"Nline{i+line*4}"))
+                 for i, x in enumerate(cols)])
+Nline = [item for sublist in Nline for item in sublist]
 
-col1, col2 = st.sidebar.columns(2); cols = st.sidebar.columns(Nsub)
+col1, col2 = st.sidebar.columns(2);
 col1.write("### Angle")
-angle = [float(x.text_input(f"Sublayer #{i+1}", value=str(0+i*30), key=f"angle{i}"))
-         for i, x in enumerate(cols)]
+nlines = int(Nsub/4) + math.ceil((Nsub % 4)/4)
+angle = []
+for line in range(nlines):
+    ncol = min(4, Nsub-line*4)
+    cols = st.sidebar.columns(ncol)
+    angle.append([float(x.number_input(f"Sublayer #{i+1+line*4}", value=(i+line*4)*30, key=f"angle{i+line*4}"))
+                 for i, x in enumerate(cols)])
+angle = [item for sublist in angle for item in sublist]
 
-col1, col2 = st.sidebar.columns(2); cols = st.sidebar.columns(Nsub)
+col1, col2 = st.sidebar.columns(2);
 col1.write("### Shift in X of each sublayer(mm)")
-shiftX = [float(x.text_input(f"Sublayer #{i+1}", value="0", key=f"shiftX{i}"))
-         for i, x in enumerate(cols)]
+nlines = int(Nsub/4) + math.ceil((Nsub % 4)/4)
+shiftX = []
+for line in range(nlines):
+    ncol = min(4, Nsub-line*4)
+    cols = st.sidebar.columns(ncol)
+    shiftX.append([float(x.number_input(f"Sublayer #{i+1+line*4}", value=0, key=f"shiftX{i+line*4}"))
+                   for i, x in enumerate(cols)])
+shiftX = [item for sublist in shiftX for item in sublist]
 
-col1, col2 = st.sidebar.columns(2); cols = st.sidebar.columns(Nsub)
+col1, col2 = st.sidebar.columns(2);
 col1.write("### Shift in Y of each sublayer (mm)")
-shiftY = [float(x.text_input(f"Sublayer #{i+1}", value="0", key=f"shiftY{i}"))
-          for i, x in enumerate(cols)]
+nlines = int(Nsub/4) + math.ceil((Nsub % 4)/4)
+shiftY = []
+for line in range(nlines):
+    ncol = min(4, Nsub-line*4)
+    cols = st.sidebar.columns(ncol)
+    shiftY.append([float(x.number_input(f"Sublayer #{i+1+line*4}", value=0, key=f"shiftY{i+line*4}"))
+                 for i, x in enumerate(cols)])
+shiftY = [item for sublist in shiftY for item in sublist]
 
-col1, col2 = st.sidebar.columns(2); cols = st.sidebar.columns(Nsub)
+col1, col2 = st.sidebar.columns(2);
 col1.write("### Miror image in X")
-mirrorX = [x.checkbox(f"Sublayer #{i+1}", value=0, key=f"mirrorX{i}")
-          for i, x in enumerate(cols)]
+nlines = int(Nsub/4) + math.ceil((Nsub % 4)/4)
+mirrorX = []
+for line in range(nlines):
+    ncol = min(4, Nsub-line*4)
+    cols = st.sidebar.columns(ncol)
+    mirrorX.append([x.checkbox(f"Sublayer #{i+1+line*4}", value=0, key=f"mirrorX{i+line*4}")
+                    for i, x in enumerate(cols)])
+mirrorX = [item for sublist in mirrorX for item in sublist]
 
-col1, col2 = st.sidebar.columns(2); cols = st.sidebar.columns(Nsub)
+col1, col2 = st.sidebar.columns(2);
 col1.write("### Miror image in Y")
-mirrorY = [x.checkbox(f"Sublayer #{i+1}", value=0, key=f"mirrorY{i}")
-          for i, x in enumerate(cols)]
+nlines = int(Nsub/4) + math.ceil((Nsub % 4)/4)
+mirrorY = []
+for line in range(nlines):
+    ncol = min(4, Nsub-line*4)
+    cols = st.sidebar.columns(ncol)
+    mirrorY.append([x.checkbox(f"Sublayer #{i+1+line*4}", value=0, key=f"mirrorY{i+line*4}")
+                 for i, x in enumerate(cols)])
+mirrorY = [item for sublist in mirrorY for item in sublist]
 
-col1, col2 = st.sidebar.columns(2); cols = st.sidebar.columns(Nsub)
+col1, col2 = st.sidebar.columns(2);
 col1.write("### Inverse points order")
-reverse = [x.checkbox(f"Sublayer #{i+1}", value=0, key=f"reverse{i}")
-          for i, x in enumerate(cols)]
+nlines = int(Nsub/4) + math.ceil((Nsub % 4)/4)
+reverse = []
+for line in range(nlines):
+    ncol = min(4, Nsub-line*4)
+    cols = st.sidebar.columns(ncol)
+    reverse.append([x.checkbox(f"Sublayer #{i+1+line*4}", value=0, key=f"reverse{i+line*4}")
+                    for i, x in enumerate(cols)])
+reverse = [item for sublist in reverse for item in sublist]
 
-col1, col2 = st.sidebar.columns(2); cols = st.sidebar.columns(Nsub)
+col1, col2 = st.sidebar.columns(2);
 col1.write("### Add a point to sublayer (X coordinates)")
-ADDX = [float(x.text_input(f"Sublayer #{i+1}", value="0", key=f"ADDX{i}"))
-          for i, x in enumerate(cols)]
+nlines = int(Nsub/4) + math.ceil((Nsub % 4)/4)
+ADDX = []
+for line in range(nlines):
+    ncol = min(4, Nsub-line*4)
+    cols = st.sidebar.columns(ncol)
+    ADDX.append([float(x.number_input(f"Sublayer #{i+1+line*4}", value=0, key=f"ADDX{i+line*4}"))
+                   for i, x in enumerate(cols)])
+ADDX = [item for sublist in ADDX for item in sublist]
 
-col1, col2 = st.sidebar.columns(2); cols = st.sidebar.columns(Nsub)
+col1, col2 = st.sidebar.columns(2);
 col1.write("### Add a point to sublayer (Y coordinates)")
-ADDY = [float(x.text_input(f"Sublayer #{i+1}", value="0", key=f"ADDY{i}"))
-          for i, x in enumerate(cols)]
+nlines = int(Nsub/4) + math.ceil((Nsub % 4)/4)
+ADDY = []
+for line in range(nlines):
+    ncol = min(4, Nsub-line*4)
+    cols = st.sidebar.columns(ncol)
+    ADDY.append([float(x.number_input(f"Sublayer #{i+1+line*4}", value=0, key=f"ADDY{i+line*4}"))
+                 for i, x in enumerate(cols)])
+ADDY = [item for sublist in ADDY for item in sublist]
 
 col1, col2 = st.sidebar.columns(2); cols = st.sidebar.columns(2)
 col1.write("### Shift of the whole pattern")
-centershift = cols[0].number_input("Shift X",0), cols[1].number_input("Shift Y",0)
+centershift = cols[0].number_input(
+    "Shift X", value=0), cols[1].number_input("Shift Y", value=0)
 
 col1, col2 = st.sidebar.columns(2); cols = st.sidebar.columns(2)
 col1.write("## Ending loops parameters");col2.write("---")
