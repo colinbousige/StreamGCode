@@ -1,3 +1,5 @@
 streamlit 
 numpy 
 matplotlib
+hydralit_components
+math
