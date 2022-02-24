@@ -1,5 +1,5 @@
 streamlit 
 numpy 
 matplotlib
-hydralit_components
+hydralit
 math
