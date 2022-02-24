@@ -2,4 +2,3 @@ streamlit
 numpy 
 matplotlib
 hydralit
-math
