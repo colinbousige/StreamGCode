@@ -26,7 +26,9 @@ st.set_page_config(
     }
 )
 st.title("Simple G-Code creator for precise Direct-writing")
-bt1, bt2 = st.columns(2)
+bt1, bt2, bt3 = st.columns(3)
+remote_voltage = bt2.checkbox('Remote voltage/current control', value=1)
+
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # 
 # Definition of global options
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # 
@@ -234,8 +236,9 @@ def writeout():
     GCODE += "\n"
     GCODE += "G90 ; use absolute coordinates\n"
     GCODE += "M107\n"
-    GCODE += "M42 S255 P5\n"
-    GCODE += "M42 S24 P4\n"
+    if(remote_voltage):
+        GCODE += "M42 S255 P5\n"
+        GCODE += "M42 S24 P4\n"
     GCODE += "\n"
     GCODE += "\n"
     GCODE += "; ----------------- End of GCODE init -----------------\n"
@@ -431,5 +434,5 @@ if 'zoom' not in st.session_state:
     st.session_state.zoom = 0
 if bt1.button("Zoom in/out"):
     st.session_state.zoom = (st.session_state.zoom + 1) % 2
-bt2.download_button('Download GCODE', writeout())
+bt3.download_button('Download GCODE', writeout())
 plotstruct(GP, st.session_state.zoom)
