@@ -1,6 +1,7 @@
 # run with: streamlit run StreamGCode.py
 import streamlit as st
 import hydralit_components as hc
+from pathlib import Path
 import lines
 import circles
 import spirals
@@ -18,10 +19,14 @@ st.set_page_config(
             ### Simple G-Code creator for precise Direct-writing
             Version date 2022-02-24.
 
-            This app was made by [Colin Bousige](https://lmi.cnrs.fr/author/colin-bousige/). Contact me for support or to signal a bug.
+            This app was made by [Colin Bousige](mailto:colin.bousige@cnrs.fr). Contact me for support or to signal a bug.
             """
     }
 )
+
+
+def read_markdown_file(markdown_file):
+    return Path(markdown_file).read_text()
 
 # Menu definition
 menu_data = [
@@ -43,7 +48,8 @@ menu_id = hc.nav_bar(
 )
 
 if menu_id == "About":
-    st.write("Hello")
+    about_markdown = read_markdown_file("about.md")
+    st.markdown(about_markdown, unsafe_allow_html=True)
 
 if menu_id == "Lines":
     lines.app()

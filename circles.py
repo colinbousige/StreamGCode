@@ -192,6 +192,7 @@ def app():
         GCODE += "G90 ; use absolute coordinates\n"
         GCODE += "M107\n"
         if(remote_voltage):
+            GCODE += "; Remote voltage/current control\n"
             GCODE += "M42 S255 P5\n"
             GCODE += "M42 S24 P4\n"
         GCODE += "\n"
