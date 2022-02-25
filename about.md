@@ -1,5 +1,11 @@
 ## Simple G-Code creator for precise Direct-writing
 
+- [About this app](#about-this-app)
+- [Usage](#usage)
+- [Support](#support)
+- [How to cite](#how-to-cite)
+- [License](#license)
+
 ### About this app
 
 This application is meant to help you write GCcode files for various shapes:
@@ -7,12 +13,6 @@ This application is meant to help you write GCcode files for various shapes:
 - Lines
 - Circles with inner grid
 - Spirals
-
-### How to cite
-
-This work is related to the article [*"Name of the article"*, L. Courty, C. Bousige, A. Brioude, V. Salles, *Journal* **volume** (2022), pages](http://doi.org/the_doi). Please cite this work if you publish using this code.
-
-The source can be found [on Github](https://github.com/colinbousige/StreamGCode), please consider citing it to.
 
 ### Usage
 
@@ -27,6 +27,31 @@ The image of the structure can be saved by right clicking on it and saving it.
 ### Support
 
 This app was made by [Colin Bousige](mailto:colin.bousige@cnrs.fr). Contact me for support or to signal a bug.
+
+### How to cite
+
+This work is related to the article [*"Name of the article"*, L. Bourdon, C. Bousige, A. Brioude, V. Salles, *Journal* **volume** (2022), pages](http://doi.org/the_doi). Please cite this work if you publish using this code:
+
+```bibtex
+@article{Bourdon_2022,
+    author = {},
+    journal = {},
+    volume = {},
+    year = {2022},
+    pages = {}
+    doi = {}
+    }
+```
+
+The source can be found [on Github](https://github.com/colinbousige/StreamGCode), please consider citing it to:
+
+```bibtex
+@software{Bousige_Simple_G-Code_creator,
+    author = {Bousige, Colin},
+    title = {{Simple G-Code creator for precise Direct-writing}},
+    url = {https://github.com/colinbousige/StreamGCode}
+}
+```
 
 ### License
 
