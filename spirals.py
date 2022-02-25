@@ -43,7 +43,7 @@ def app():
     GP.XMIN = col1.number_input("X min:", value=50., step=1.)
     GP.XMAX = col2.number_input("X max:", value=350., step=1.)
     GP.YMIN = col1.number_input("Y min:", value=50., step=1.)
-    GP.YMAX = col2.number_input("Y min:", value=350., step=1.)
+    GP.YMAX = col2.number_input("Y max:", value=350., step=1.)
     GP.CENTERX = (GP.XMAX + GP.XMIN)/2.
     GP.CENTERY = (GP.YMAX + GP.YMIN)/2.
     GP.DELTAX = GP.XMAX - GP.XMIN
