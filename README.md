@@ -45,7 +45,7 @@ This work is related to the article [*"Name of the article"*, L. Bourdon, C. Bou
     }
 ```
 
-The source can be found [on Github](https://github.com/colinbousige/StreamGCode), please consider citing it to:
+The source can be found [on Github](https://github.com/colinbousige/StreamGCode), please consider citing it too:
 
 ```bibtex
 @software{Bousige_Simple_G-Code_creator,
