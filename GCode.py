@@ -36,7 +36,7 @@ menu_data = [
 ]
 
 over_theme = {'txc_inactive': '#000','txc_active': '#fff', 
-              'menu_background': '#fff', 'option_active':'#000'}
+              'menu_background': '#eceff4', 'option_active': '#000'}
 menu_id = hc.nav_bar(
     menu_definition=menu_data,
     override_theme=over_theme,
