@@ -285,7 +285,7 @@ def app():
     for line in range(nlines):
         ncol = min(4, Nsub-line*4)
         cols = st.sidebar.columns(ncol)
-        step.append([float(x.number_input(f"Sublayer #{i+1+line*4}", value=10., step=1., key=f"step{i+line*4}"))
+        step.append([float(x.number_input(f"Sublayer #{i+1+line*4}", value=10., step=1.000, key=f"step{i+line*4}"))
                     for i, x in enumerate(cols)])
     step = [item for sublist in step for item in sublist]
 
