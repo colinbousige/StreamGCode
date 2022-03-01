@@ -274,7 +274,7 @@ def app():
     for line in range(nlines):
         ncol = min(4, Nsub-line*4)
         cols = st.sidebar.columns(ncol)
-        length.append([float(x.number_input(f"Sublayer #{i+1+line*4}", value=200, key=f"length{i+line*4}"))
+        length.append([float(x.number_input(f"Sublayer #{i+1+line*4}", value=200., step=1., format="%.3f", key=f"length{i+line*4}"))
                 for i, x in enumerate(cols)])
     length = [item for sublist in length for item in sublist]
 
@@ -318,7 +318,7 @@ def app():
     for line in range(nlines):
         ncol = min(4, Nsub-line*4)
         cols = st.sidebar.columns(ncol)
-        shiftX.append([float(x.number_input(f"Sublayer #{i+1+line*4}", value=0, key=f"shiftX{i+line*4}"))
+        shiftX.append([float(x.number_input(f"Sublayer #{i+1+line*4}", value=0., step=1., format="%.3f", key=f"shiftX{i+line*4}"))
                     for i, x in enumerate(cols)])
     shiftX = [item for sublist in shiftX for item in sublist]
 
@@ -329,7 +329,7 @@ def app():
     for line in range(nlines):
         ncol = min(4, Nsub-line*4)
         cols = st.sidebar.columns(ncol)
-        shiftY.append([float(x.number_input(f"Sublayer #{i+1+line*4}", value=0, key=f"shiftY{i+line*4}"))
+        shiftY.append([float(x.number_input(f"Sublayer #{i+1+line*4}", value=0., step=1., format="%.3f", key=f"shiftY{i+line*4}"))
                     for i, x in enumerate(cols)])
     shiftY = [item for sublist in shiftY for item in sublist]
 
@@ -373,7 +373,7 @@ def app():
     for line in range(nlines):
         ncol = min(4, Nsub-line*4)
         cols = st.sidebar.columns(ncol)
-        ADDX.append([float(x.number_input(f"Sublayer #{i+1+line*4}", value=0, key=f"ADDX{i+line*4}"))
+        ADDX.append([float(x.number_input(f"Sublayer #{i+1+line*4}", value=0., step=1., format="%.3f", key=f"ADDX{i+line*4}"))
                     for i, x in enumerate(cols)])
     ADDX = [item for sublist in ADDX for item in sublist]
 
@@ -384,22 +384,24 @@ def app():
     for line in range(nlines):
         ncol = min(4, Nsub-line*4)
         cols = st.sidebar.columns(ncol)
-        ADDY.append([float(x.number_input(f"Sublayer #{i+1+line*4}", value=0, key=f"ADDY{i+line*4}"))
+        ADDY.append([float(x.number_input(f"Sublayer #{i+1+line*4}", value=0., step=1., format="%.3f", key=f"ADDY{i+line*4}"))
                     for i, x in enumerate(cols)])
     ADDY = [item for sublist in ADDY for item in sublist]
 
     col1, col2 = st.sidebar.columns(2); cols = st.sidebar.columns(2)
     col1.write("### Shift of the whole pattern")
     centershift = cols[0].number_input(
-        "Shift X", value=0), cols[1].number_input("Shift Y", value=0)
+        "Shift X", value=0., step=1., format="%.3f"), cols[1].number_input("Shift Y", value=0., step=1., format="%.3f")
 
     col1, col2 = st.sidebar.columns(2); cols = st.sidebar.columns(2)
     col1.write("## Ending loops parameters");col2.write("---")
 
     col1, col2 = st.sidebar.columns(2)
-    loopdiameter = col1.number_input("Diameter (mm)", value=10)
+    loopdiameter = col1.number_input(
+        "Diameter (mm)", value=10., step=1., format="%.3f",)
     looppoints = col2.number_input("Number of points", value=0)
-    loopshiftX = col1.number_input("Lateral shift (mm)", value=0)
+    loopshiftX = col1.number_input(
+        "Lateral shift (mm)", value=0., step=1., format="%.3f")
     loopSkip = col2.number_input("Excluding angle", value=90)
 
     col1, col2 = st.sidebar.columns(2); 
