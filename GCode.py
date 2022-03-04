@@ -24,6 +24,20 @@ st.set_page_config(
     }
 )
 
+st.markdown(
+    """
+        <style>
+        [data-testid="stSidebar"][aria-expanded="true"] > div:first-child {
+            width: 400px;
+        }
+        [data-testid="stSidebar"][aria-expanded="false"] > div:first-child {
+            width: 400px;
+            margin-left: -400px;
+        }
+        </style>
+        """,
+    unsafe_allow_html=True
+)
 
 def read_markdown_file(markdown_file):
     return Path(markdown_file).read_text()
@@ -47,9 +61,17 @@ menu_id = hc.nav_bar(
     sticky_mode='jumpy'
 )
 
+
 if menu_id == "About":
     about_markdown = read_markdown_file("about.md")
     st.markdown(about_markdown, unsafe_allow_html=True)
+    st.sidebar.write("""
+- [About this app](#about-this-app)
+- [Usage](#usage)
+- [Support](#support)
+- [How to cite](#how-to-cite)
+- [License](#license)""")
+
 
 if menu_id == "Lines":
     lines.app()

@@ -1,18 +1,18 @@
-## Simple G-Code creator for precise Direct-writing
-
-- [About this app](#about-this-app)
-- [Usage](#usage)
-- [Support](#support)
-- [How to cite](#how-to-cite)
-- [License](#license)
+# Simple G-Code creator for precise Direct-writing
 
 ### About this app
+
+This App was initially developed during an academic research project, WEPRINT, funded by the French National Research Agency (N° ANR-16-CE09-0008-01). See the related paper reference in [How to cite](#how-to-cite).
+
+The first aim was to design specific patterns for a device of direct writing. As the device used a combination of a 3D printer and an electric field, the printing precision was very high and the pattern had to be made of lines a few hundreds to a few thousands of nanometers wide. As such a scale was not easy to manage with conventional CAD softwares, at least at that time, the idea to develop this App came naturally.
 
 This application is meant to help you write GCcode files for various shapes:
 
 - Lines
 - Circles with inner grid
 - Spirals
+
+Click the on wanted shape in the navigation bar at the top to go to the corresponding app.
 
 ### Usage
 

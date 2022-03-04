@@ -15,11 +15,11 @@ def app():
         """
         <style>
         [data-testid="stSidebar"][aria-expanded="true"] > div:first-child {
-            width: 700px;
+            width: 400px;
         }
         [data-testid="stSidebar"][aria-expanded="false"] > div:first-child {
-            width: 700px;
-            margin-left: -700px;
+            width: 400px;
+            margin-left: -400px;
         }
         </style>
         """,
@@ -221,7 +221,7 @@ def app():
     diam = col1.number_input(
         "Outer circle diameter (mm):", value=200., step=1., min_value=0.)
     NpointsCircle = col2.number_input(
-        "Number of points in the circle:", value=100, step=1, min_value=1)
+        "# of points in the circle:", value=100, step=1, min_value=1)
     ncoucheCircle = col1.number_input(
         "Number of layers in the outer circle:", value=1, step=1, min_value=0)
     ncoucheGrid = col2.number_input(
