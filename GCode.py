@@ -1,4 +1,4 @@
-# run with: streamlit run StreamGCode.py
+# run with: streamlit run GCode.py
 import streamlit as st
 import hydralit_components as hc
 from pathlib import Path

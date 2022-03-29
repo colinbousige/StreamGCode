@@ -112,6 +112,18 @@ def app():
                     XX = np.append(XX, X)
                     YY = np.append(YY, Y)
         return XX, YY
+    
+    def rotation(X, Y, theta):
+        """
+        Rotates X and Y coordinates from an angle theta
+        """
+        global GP
+        xx, yy = X - GP.CENTERX, Y - GP.CENTERY
+        rotX = GP.CENTERX + xx * \
+            np.cos(theta*np.pi/180) + yy*np.sin(theta*np.pi/180)
+        rotY = GP.CENTERY - xx * \
+            np.sin(theta*np.pi/180) + yy*np.cos(theta*np.pi/180)
+        return rotX, rotY
 
     def update_GP_circle():
         """
@@ -123,6 +135,7 @@ def app():
         GP.diam = diam
         GP.delta = delta
         GP.pas = pas
+        GP.angle = angle
         GP.NpointsCircle = NpointsCircle
         GP.Xstart = GP.CENTERX - GP.diam/2.
         GP.Ystart = GP.CENTERY - GP.diam/2.
@@ -141,6 +154,9 @@ def app():
                                   Xstart=GP.X[0][-1])
             GP.X.append(loopX)
             GP.Y.append(loopY)
+        if(GP.angle>0):
+            for i in range(len(GP.X)):
+                GP.X[i], GP.Y[i] = rotation(GP.X[i], GP.Y[i], GP.angle)
 
     def plotstruct(GP, zoom=0):
         """
@@ -230,6 +246,8 @@ def app():
         "Step between lines in the grid (mm):", value=5., step=1., min_value=0.)
     delta = col2.number_input(
         "Spacing between outer circle and grid (mm):", value=20., step=0.1, min_value=0.)
+    angle = col1.number_input(
+        "Rotation of the grid:", value=0., step=0.1, min_value=0.)
 
     st.sidebar.write("## Other parameters")
     remote_voltage = st.sidebar.checkbox(
