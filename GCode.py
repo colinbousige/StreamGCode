@@ -1,11 +1,9 @@
 # run with: streamlit run GCode.py
 import streamlit as st
-import hydralit_components as hc
-from pathlib import Path
-import lines
-import circles
-import spirals
+from multipage import MultiPage
+from pages import about, lines, circles, spirals
 
+app = MultiPage()
 
 st.set_page_config(
     page_title="Simple G-Code creator for precise Direct-writing",
@@ -39,46 +37,9 @@ st.markdown(
     unsafe_allow_html=True
 )
 
-def read_markdown_file(markdown_file):
-    return Path(markdown_file).read_text()
+app.add_page("About", about.app)
+app.add_page("Lines", lines.app)
+app.add_page("Circles", circles.app)
+app.add_page("Spirals", spirals.app)
 
-# Menu definition
-menu_data = [
-    {'icon': "fas fa-crop-alt", 'label': "Lines"},
-    {'icon': "fas fa-bullseye", 'label': "Circles"},
-    {'icon': "fas fa-redo", 'label': "Spirals"},
-]
-
-over_theme = {'txc_inactive': '#000','txc_active': '#fff', 
-              'menu_background': '#eceff4', 'option_active': '#000'}
-menu_id = hc.nav_bar(
-    menu_definition=menu_data,
-    override_theme=over_theme,
-    home_name='About',
-    hide_streamlit_markers=False,
-    sticky_nav=True,
-    use_animation=False,
-    sticky_mode='jumpy'
-)
-
-
-if menu_id == "About":
-    about_markdown = read_markdown_file("about.md")
-    st.markdown(about_markdown, unsafe_allow_html=True)
-    st.sidebar.write("""
-- [About this app](#about-this-app)
-- [Usage](#usage)
-- [Support](#support)
-- [How to cite](#how-to-cite)
-- [License](#license)""")
-
-
-if menu_id == "Lines":
-    lines.app()
-
-if menu_id == "Circles":
-    circles.app()
-
-if menu_id == "Spirals":
-    spirals.app()
-
+app.run()
