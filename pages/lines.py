@@ -8,8 +8,9 @@ from matplotlib.figure import Figure
 # implement the default mpl key bindings
 from matplotlib.collections import LineCollection
 
+
 def app():
-    bt1, bt2 = st.columns(2)
+    bt, plotarea = st.columns([1, 6])
     st.markdown(
         """
         <style>
@@ -39,10 +40,10 @@ def app():
     GP = structure('')
     st.sidebar.title("Definition of printing area")
     col1, col2 = st.sidebar.columns(2)
-    GP.XMIN = col1.number_input("X min:", value=50., step=1.)
-    GP.XMAX = col2.number_input("X max:", value=350., step=1.)
-    GP.YMIN = col1.number_input("Y min:", value=50., step=1.)
-    GP.YMAX = col2.number_input("Y max:", value=350., step=1.)
+    GP.XMIN = col1.number_input("X min:", value=50., step=1., key="lines_XMIN")
+    GP.XMAX = col2.number_input("X max:", value=350., step=1., key="lines_XMAX")
+    GP.YMIN = col1.number_input("Y min:", value=50., step=1., key="lines_YMIN")
+    GP.YMAX = col2.number_input("Y max:", value=350., step=1., key="lines_YMAX")
     GP.CENTERX = (GP.XMAX + GP.XMIN)/2.
     GP.CENTERY = (GP.YMAX + GP.YMIN)/2.
     GP.DELTAX = GP.XMAX - GP.XMIN
@@ -202,7 +203,7 @@ def app():
             ax1.set_xlim(GP.XMIN, GP.XMAX)
             ax1.set_ylim(GP.YMIN, GP.YMAX)
         ax1.set_aspect('equal', 'datalim')
-        st.pyplot(f)
+        plotarea.pyplot(f)
 
 
     def writeout():
@@ -385,7 +386,7 @@ def app():
 
     col1, col2 = st.sidebar.columns(2); cols = st.sidebar.columns(2)
     st.sidebar.write("## Ending loops parameters")
-    
+
     col1, col2 = st.sidebar.columns(2)
     loopdiameter = col1.number_input(
         "Diameter (mm)", value=10., step=1., format="%.3f",)
@@ -403,7 +404,7 @@ def app():
 
     st.sidebar.write("## Other parameters")
     remote_voltage = st.sidebar.checkbox(
-        'Remote voltage/current control', value=0)
+        'Remote voltage/current control', value=0, key="lines_remote")
 
     # # # # # # # # # # # # # # # # # # # # # # # 
     # Main interface : plot and buttons
@@ -412,7 +413,7 @@ def app():
     update_GP()
     if 'zoom' not in st.session_state:
         st.session_state.zoom = 0
-    if bt1.button("Zoom in/out"):
+    if bt.button("Zoom in/out", key="lines_zoom"):
         st.session_state.zoom = (st.session_state.zoom + 1) % 2
-    bt2.download_button('Download GCODE', writeout())
+    bt.download_button('Download GCODE', writeout(), key="lines_dwn")
     plotstruct(GP, st.session_state.zoom)

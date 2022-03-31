@@ -10,7 +10,7 @@ from matplotlib.collections import LineCollection
 
 
 def app():
-    bt1, bt2 = st.columns(2)
+    bt, plotarea = st.columns([1, 6])
     st.markdown(
         """
         <style>
@@ -42,10 +42,10 @@ def app():
     GP = structure('')
     st.sidebar.title("Definition of printing area")
     col1, col2 = st.sidebar.columns(2)
-    GP.XMIN = col1.number_input("X min:", value=50., step=1.)
-    GP.XMAX = col2.number_input("X max:", value=350., step=1.)
-    GP.YMIN = col1.number_input("Y min:", value=50., step=1.)
-    GP.YMAX = col2.number_input("Y max:", value=350., step=1.)
+    GP.XMIN = col1.number_input("X min:", value=50., step=1., key="circ_XMIN")
+    GP.XMAX = col2.number_input("X max:", value=350., step=1., key="circ_XMAX")
+    GP.YMIN = col1.number_input("Y min:", value=50., step=1., key="circ_YMIN")
+    GP.YMAX = col2.number_input("Y max:", value=350., step=1., key="circ_YMAX")
     GP.CENTERX = (GP.XMAX + GP.XMIN)/2.
     GP.CENTERY = (GP.YMAX + GP.YMIN)/2.
     GP.DELTAX = GP.XMAX - GP.XMIN
@@ -70,7 +70,7 @@ def app():
             X = np.append(X, newX)
             Y = np.append(Y, newY)
         return X, Y
-    
+
     def circle_grid(x_center, y_center, pas=1, diameter=50, ncouche=1):
         global GP
         X = np.array([x_center - diameter/2])
@@ -112,7 +112,7 @@ def app():
                     XX = np.append(XX, X)
                     YY = np.append(YY, Y)
         return XX, YY
-    
+
     def rotation(X, Y, theta):
         """
         Rotates X and Y coordinates from an angle theta
@@ -142,16 +142,16 @@ def app():
         GP.X, GP.Y = [], []
         # la grille
         loopX, loopY = circle_grid(GP.CENTERX, GP.CENTERY,
-                                   pas=GP.pas,
-                                   diameter=(GP.diam - GP.delta),
-                                   ncouche=GP.ncoucheGrid)
+                                    pas=GP.pas,
+                                    diameter=(GP.diam - GP.delta),
+                                    ncouche=GP.ncoucheGrid)
         GP.X.append(loopX)
         GP.Y.append(loopY)
         for j in range(GP.ncoucheCircle):  # le cercle
             loopX, loopY = circle(GP.CENTERX, GP.CENTERY,
-                                  nbrpoints=GP.NpointsCircle,
-                                  diameter=GP.diam,
-                                  Xstart=GP.X[0][-1])
+                                    nbrpoints=GP.NpointsCircle,
+                                    diameter=GP.diam,
+                                    Xstart=GP.X[0][-1])
             GP.X.append(loopX)
             GP.Y.append(loopY)
         if(GP.angle>0):
@@ -175,7 +175,7 @@ def app():
         ax1 = f.add_subplot(1, 1, 1)
         ax1.add_collection(lc)
         ax1.plot([GP.XMIN, GP.XMAX, GP.XMAX, GP.XMIN, GP.XMIN],
-                 [GP.YMIN, GP.YMIN, GP.YMAX, GP.YMAX, GP.YMIN], c='black', linewidth=3, zorder=1)
+                    [GP.YMIN, GP.YMIN, GP.YMAX, GP.YMAX, GP.YMIN], c='black', linewidth=3, zorder=1)
         ax1.axis('off')
         if zoom:
             ax1.set_xlim(x.min()-5, x.max()+5)
@@ -184,7 +184,7 @@ def app():
             ax1.set_xlim(GP.XMIN, GP.XMAX)
             ax1.set_ylim(GP.YMIN, GP.YMAX)
         ax1.set_aspect('equal', 'datalim')
-        st.pyplot(f)
+        plotarea.pyplot(f)
 
     def writeout():
         """
@@ -223,7 +223,7 @@ def app():
         for couche in range(1,GP.ncoucheCircle+1):
             x, y = np.round(GP.X[couche],4), np.round(GP.Y[couche],4)
             GCODE += "G1 F33000 X"+str(x[0])+" Y"+str(y[0])+" ; Circle "+\
-                     str(couche)+" / "+str(GP.ncoucheCircle)+"\n"
+                        str(couche)+" / "+str(GP.ncoucheCircle)+"\n"
             for i in range(1,len(x)):
                 GCODE += "G1 X"+str(x[i])+" Y"+str(y[i])+"\n"
         return(GCODE)
@@ -251,7 +251,7 @@ def app():
 
     st.sidebar.write("## Other parameters")
     remote_voltage = st.sidebar.checkbox(
-        'Remote voltage/current control', value=0)
+        'Remote voltage/current control', value=0, key="circle_remote_voltage")
 
     # # # # # # # # # # # # # # # # # # # # # # #
     # Main interface : plot and buttons
@@ -260,7 +260,7 @@ def app():
     update_GP_circle()
     if 'zoom' not in st.session_state:
         st.session_state.zoom = 0
-    if bt1.button("Zoom in/out"):
+    if bt.button("Zoom in/out", key="circles_zoom"):
         st.session_state.zoom = (st.session_state.zoom + 1) % 2
-    bt2.download_button('Download GCODE', writeout())
+    bt.download_button('Download GCODE', writeout(), key="circles_download")
     plotstruct(GP, st.session_state.zoom)

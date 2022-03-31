@@ -8,8 +8,9 @@ from matplotlib.figure import Figure
 # implement the default mpl key bindings
 from matplotlib.collections import LineCollection
 
+
 def app():
-    bt1, bt2 = st.columns(2)
+    bt, plotarea = st.columns([1,6])
     st.markdown(
         """
         <style>
@@ -24,7 +25,7 @@ def app():
         """,
         unsafe_allow_html=True
     )
-    
+
     # # # # # # # # # # # # # # # # # # # # # # # # # # # # # 
     # Definition of global options
     # # # # # # # # # # # # # # # # # # # # # # # # # # # # # 
@@ -40,10 +41,10 @@ def app():
     GP = structure('')
     st.sidebar.title("Definition of printing area")
     col1, col2 = st.sidebar.columns(2)
-    GP.XMIN = col1.number_input("X min:", value=50., step=1.)
-    GP.XMAX = col2.number_input("X max:", value=350., step=1.)
-    GP.YMIN = col1.number_input("Y min:", value=50., step=1.)
-    GP.YMAX = col2.number_input("Y max:", value=350., step=1.)
+    GP.XMIN = col1.number_input("X min:", value=50., step=1., key="spir_XMIN")
+    GP.XMAX = col2.number_input("X max:", value=350., step=1., key="spir_XMAX")
+    GP.YMIN = col1.number_input("Y min:", value=50., step=1., key="spir_YMIN")
+    GP.YMAX = col2.number_input("Y max:", value=350., step=1., key="spir_YMAX")
     GP.CENTERX = (GP.XMAX + GP.XMIN)/2.
     GP.CENTERY = (GP.YMAX + GP.YMIN)/2.
     GP.DELTAX = GP.XMAX - GP.XMIN
@@ -124,18 +125,18 @@ def app():
         GP.X, GP.Y = [], []
         # Spiral definition
         loopX, loopY = spiral(GP.CENTERX, GP.CENTERY,
-                              pas=GP.pas,
-                              diameter=(GP.diam - GP.delta),
-                              ncouche=GP.ncoucheSpir,
-                              nbrpoints=GP.NptSpir,
-                              fermi=GP.fermi)
+                                pas=GP.pas,
+                                diameter=(GP.diam - GP.delta),
+                                ncouche=GP.ncoucheSpir,
+                                nbrpoints=GP.NptSpir,
+                                fermi=GP.fermi)
         GP.X.append(loopX)
         GP.Y.append(loopY)
         for j in range(GP.ncoucheCircle):  # The circle
             loopX, loopY = circle(GP.CENTERX, GP.CENTERY,
-                                  nbrpoints=GP.NpointsCircle,
-                                  diameter=GP.diam,
-                                  Xstart=GP.X[0][-1])
+                                    nbrpoints=GP.NpointsCircle,
+                                    diameter=GP.diam,
+                                    Xstart=GP.X[0][-1])
             GP.X.append(loopX)
             GP.Y.append(loopY)
 
@@ -164,7 +165,7 @@ def app():
             ax1.set_xlim(GP.XMIN, GP.XMAX)
             ax1.set_ylim(GP.YMIN, GP.YMAX)
         ax1.set_aspect('equal', 'datalim')
-        st.pyplot(f)
+        plotarea.pyplot(f)
 
 
     def writeout():
@@ -204,7 +205,7 @@ def app():
         for couche in range(1, GP.ncoucheCircle+1):
             x, y = np.round(GP.X[couche], 4), np.round(GP.Y[couche], 4)
             GCODE += "G1 F33000 X"+str(x[0])+" Y"+str(y[0]) + \
-                     " ; Circle "+str(couche)+" / "+str(GP.ncoucheCircle)+"\n"
+                        " ; Circle "+str(couche)+" / "+str(GP.ncoucheCircle)+"\n"
             for i in range(1, len(x)):
                 GCODE += "G1 X"+str(x[i])+" Y"+str(y[i])+"\n"
             GCODE += "\n"
@@ -217,10 +218,12 @@ def app():
 
     st.sidebar.title("Spiral Parameters")
     col1, col2 = st.sidebar.columns(2)
-    diamCircle_sp = col1.number_input("Outer circle diameter (mm):", value=200., step=1., min_value=0.)
-    NpointsCircle_sp = col2.number_input("# of points in the circle:", value=100, step=1, min_value=1)
+    diamCircle_sp = col1.number_input(
+        "Outer circle diameter (mm):", value=200., step=1., min_value=0., key="spir_diamCircle_sp")
+    NpointsCircle_sp = col2.number_input(
+        "# of points in the circle:", value=100, step=1, min_value=1, key="spir_NpointsCircle_sp")
     ncoucheCircle_sp = col1.number_input(
-        "# of layers in the outer circle:", value=1, step=1, min_value=0)
+        "# of layers in the outer circle:", value=1, step=1, min_value=0, key="spir_ncoucheCircle_sp")
     pasSpir = col2.number_input("Spiral step:", value=10., step=1., min_value=0.)
     NptSpir = col1.number_input("Number of points in the spiral:", value=500, step=1, min_value=0)
     deltaCircle_sp = col2.number_input("Delta between spiral and outer circle (mm):", value=2., step=0.1, min_value=0.)
@@ -229,7 +232,7 @@ def app():
 
     st.sidebar.write("## Other parameters")
     remote_voltage = st.sidebar.checkbox(
-        'Remote voltage/current control', value=0)
+        'Remote voltage/current control', value=0, key="spirals_remote")
 
     # # # # # # # # # # # # # # # # # # # # # # # 
     # Main interface : plot and buttons
@@ -238,7 +241,7 @@ def app():
     update_GP_spiral()
     if 'zoom' not in st.session_state:
         st.session_state.zoom = 0
-    if bt1.button("Zoom in/out"):
+    if bt.button("Zoom in/out", key="spirals_zoom"):
         st.session_state.zoom = (st.session_state.zoom + 1) % 2
-    bt2.download_button('Download GCODE', writeout())
+    bt.download_button('Download GCODE', writeout(), key="spirals_zoom")
     plotstruct(GP, st.session_state.zoom)

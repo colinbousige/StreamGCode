@@ -22,7 +22,7 @@ This application is meant to help you write GCcode files for various shapes:
 
 ### Usage
 
-Click on the shape you want to produce in the navigation bar at the top, then enter all your parameters in the sidebar panel. The resulting shape is drawn in the right panel with a color ranging from green to red, *i.e.* from start to end of the printing. The printing area is represented by the thick black rectangle.
+Select the shape you want to produce at the top of the sidebar, then enter all your parameters in the sidebar panel. The resulting shape is drawn in the right panel with a color ranging from green to red, *i.e.* from start to end of the printing. The printing area is represented by the thick black rectangle.
 
 Once you are happy with your shape, click the "Download GCODE" button to download the resulting GCode file.
 
