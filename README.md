@@ -1,6 +1,7 @@
 [![DOI](https://zenodo.org/badge/417509535.svg)](https://zenodo.org/badge/latestdoi/417509535)
 
-## Simple G-Code creator for precise Direct-writing
+# Simple G-Code creator for precise Direct-writing  <a href="https://zenodo.org/badge/latestdoi/417509535"><img src="https://zenodo.org/badge/417509535.svg" alt="DOI" align="right"></a>
+
 
 - [About this app](#about-this-app)
 - [Usage](#usage)
@@ -8,7 +9,7 @@
 - [How to cite](#how-to-cite)
 - [License](#license)
 
-### About this app
+## About this app
 
 This App was initially developed during an academic research project, WEPRINT, funded by the French National Research Agency (N° ANR-16-CE09-0008-01). See the related paper reference in [How to cite](#how-to-cite).
 
@@ -22,7 +23,7 @@ This application is meant to help you write GCcode files for various shapes:
 
 **See the running app [here](https://share.streamlit.io/colinbousige/streamgcode/GCode.py).**
 
-### Usage
+## Usage
 
 Select the shape you want to produce at the top of the sidebar, then enter all your parameters in the sidebar panel. The resulting shape is drawn in the right panel with a color ranging from green to red, *i.e.* from start to end of the printing. The printing area is represented by the thick black rectangle.
 
@@ -32,18 +33,19 @@ The "Remote voltage/current control" checkbox adds the lines "M42 S255 P5" and "
 
 The image of the structure can be saved by right clicking on it and saving it.
 
-### Support
+## Support
 
 This app was made by [Colin Bousige](mailto:colin.bousige@cnrs.fr). Contact me for support or to signal a bug.
 
-### How to cite
+## How to cite
 
-This work is related to the article [*"Name of the article"*, L. Bourdon, C. Bousige, A. Brioude, V. Salles, *Journal* **volume** (2022), pages](http://doi.org/the_doi). Please cite this work if you publish using this code:
+This work is related to the article [*"Potential of a bi-functional scaffold fabricated by direct-writing electrospinning for the periodontal regeneration"*, Laura Bourdon, Nina Attik, Liza Benami, Charlène Chevalier, Colin Bousige, Arnaud Brioude and Vincent Salles, *Acta Biomaterialia* (2022), pages](http://doi.org/the_doi). Please cite this work if you publish using this code:
 
 ```bibtex
 @article{Bourdon_2022,
-    author = {},
-    journal = {},
+    title = {Potential of a bi-functional scaffold fabricated by direct-writing electrospinning for the periodontal regeneration},
+    author = {Bourdon, Laura and Attik, Nina and Benami, Liza and Chevalier, Charlène and Bousige, Colin and Brioude, Arnaud and Salles, Vincent},
+    journal = {Acta Biomaterialia},
     volume = {},
     year = {2022},
     pages = {}
@@ -61,7 +63,7 @@ The source can be found [on Github](https://github.com/colinbousige/StreamGCode)
 }
 ```
 
-### License
+## License
 
 This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-nc/4.0/">Creative Commons Attribution-NonCommercial 4.0 International License</a>.
 
