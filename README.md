@@ -21,6 +21,8 @@ This application is meant to help you write GCcode files for various shapes:
 
 **See the running app [here](https://share.streamlit.io/colinbousige/streamgcode/GCode.py).**
 
+Otherwise, download this repo, navigate to its folder, and launch the app with `streamlit run GCode.py`
+
 ## Usage
 
 Select the shape you want to produce at the top of the sidebar, then enter all your parameters in the sidebar panel. The resulting shape is drawn in the right panel with a color ranging from green to red, *i.e.* from start to end of the printing. The printing area is represented by the thick black rectangle.
