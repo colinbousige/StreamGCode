@@ -1,3 +1,5 @@
+[![DOI](https://zenodo.org/badge/417509535.svg)](https://zenodo.org/badge/latestdoi/417509535)
+
 ## Simple G-Code creator for precise Direct-writing
 
 - [About this app](#about-this-app)
