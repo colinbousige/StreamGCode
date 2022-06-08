@@ -12,7 +12,7 @@ This application is meant to help you write GCcode files for various shapes:
 - Circles with inner grid
 - Spirals
 
-Select the wanted shape in the "App Navigation" dropdown menu at the top of the left sidebar to go to the corresponding app.
+Select the wanted shape in the sidebar menu to go to the corresponding app.
 
 ### Usage
 

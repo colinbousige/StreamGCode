@@ -1,4 +1,4 @@
-# run with: streamlit run 🏠_Home.py
+# run with: streamlit run GCode.py
 import streamlit as st
 from pathlib import Path
 
@@ -41,8 +41,9 @@ st.markdown(
 about_markdown = read_markdown_file("pages/about.md")
 st.markdown(about_markdown, unsafe_allow_html=True)
 st.sidebar.write("""
-- [About this app](#about-this-app)
-- [Usage](#usage)
-- [Support](#support)
-- [How to cite](#how-to-cite)
-- [License](#license)""")
+### [About this app](#about-this-app)
+### [Usage](#usage)
+### [Support](#support)
+### [How to cite](#how-to-cite)
+### [License](#license)""")
+
