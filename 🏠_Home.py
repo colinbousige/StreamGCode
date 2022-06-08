@@ -1,9 +1,9 @@
-# run with: streamlit run GCode.py
+# run with: streamlit run 🏠_Home.py
 import streamlit as st
-from multipage import MultiPage
-from pages import about, lines, circles, spirals
+from pathlib import Path
 
-app = MultiPage()
+def read_markdown_file(markdown_file):
+    return Path(markdown_file).read_text()
 
 st.set_page_config(
     page_title="Simple G-Code creator for precise Direct-writing",
@@ -37,9 +37,12 @@ st.markdown(
     unsafe_allow_html=True
 )
 
-app.add_page("About", about.app)
-app.add_page("Lines", lines.app)
-app.add_page("Circles", circles.app)
-app.add_page("Spirals", spirals.app)
 
-app.run()
+about_markdown = read_markdown_file("pages/about.md")
+st.markdown(about_markdown, unsafe_allow_html=True)
+st.sidebar.write("""
+- [About this app](#about-this-app)
+- [Usage](#usage)
+- [Support](#support)
+- [How to cite](#how-to-cite)
+- [License](#license)""")
