@@ -141,7 +141,7 @@ def update_GP_spiral():
 
 def plotstruct(GP, zoom=0):
     """
-    Plots the define 'structure' object, with option to zoom in or out
+    Plots the defined 'structure' object, with option to zoom in or out
     """
     cmap = cm.RdYlGn_r
     x, y = np.concatenate(GP.X), np.concatenate(GP.Y)
