@@ -242,5 +242,5 @@ if 'zoom' not in st.session_state:
     st.session_state.zoom = 0
 if bt.button("Zoom in/out", key="spirals_zoom"):
     st.session_state.zoom = (st.session_state.zoom + 1) % 2
-bt.download_button('Download GCODE', writeout(), key="spirals_zoom")
+bt.download_button('Download GCODE', writeout(), key="download_spirals")
 plotstruct(GP, st.session_state.zoom)
