@@ -35,7 +35,7 @@ The image of the structure can be saved by right clicking on it and saving it.
 
 ## Support
 
-This app was made by [Colin Bousige](mailto:colin.bousige@cnrs.fr). Contact me for support or to signal a bug.
+This app was made by [Colin Bousige](mailto:colin.bousige@cnrs.fr). Contact me for support or to signal a bug, or leave a message on the [GitHub page of the app](https://github.com/colinbousige/StreamGCode).
 
 ## How to cite
 

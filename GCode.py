@@ -12,7 +12,9 @@ st.set_page_config(
         'Report a bug': "https://lmi.cnrs.fr/author/colin-bousige/",
         'About': """
             ### Simple G-Code creator for precise Direct-writing
-            Version date 2022-02-24.
+            Version date 2023-03-29.
+            
+            [GitHub page of the app](https://github.com/colinbousige/StreamGCode)
 
             This app was made by [Colin Bousige](mailto:colin.bousige@cnrs.fr). Contact me for support or to signal a bug.
             """
