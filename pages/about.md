@@ -30,17 +30,18 @@ This app was made by [Colin Bousige](mailto:colin.bousige@cnrs.fr). Contact me f
 
 ### How to cite
 
-This work is related to the article [*"Name of the article"*, L. Bourdon, C. Bousige, A. Brioude, V. Salles, *Journal* **volume** (2022), pages](http://doi.org/the_doi). Please cite this work if you publish using this code:
+This work is related to the article [*"Direct-Writing Electrospun Functionalized Scaffolds for Periodontal Regeneration: In Vitro Studies"*, Laura Bourdon, Nina Attik, Liza Benami, Charlène Chevalier, Colin Bousige, Arnaud Brioude and Vincent Salles, *J. Funct. Biomater.* **14**(5) (2023), 263](https://doi.org/10.3390/jfb14050263). Please cite this work if you publish using this code:
 
 ```bibtex
-@article{Bourdon_2022,
-    author = {},
-    journal = {},
-    volume = {},
-    year = {2022},
-    pages = {}
-    doi = {}
-    }
+@article{bourdon_potential_2023,
+    title = {Direct-Writing Electrospun Functionalized Scaffolds for Periodontal Regeneration: In Vitro Studies},
+    author = {Bourdon, Laura and Attik, Nina and Benami, Liza and Chevalier, Charlène and Bousige, Colin and Brioude, Arnaud and Salles, Vincent},
+    journal = {J. Funct. Biomater.},
+    volume = {14},
+    year = {2023},
+    pages = {263}
+    doi = {10.3390/jfb14050263}
+}
 ```
 
 The source can be found [on Github](https://github.com/colinbousige/StreamGCode), please consider citing it too:
@@ -49,7 +50,8 @@ The source can be found [on Github](https://github.com/colinbousige/StreamGCode)
 @software{Bousige_Simple_G-Code_creator,
     author = {Bousige, Colin},
     title = {{Simple G-Code creator for precise Direct-writing}},
-    url = {https://github.com/colinbousige/StreamGCode}
+    url = {https://github.com/colinbousige/StreamGCode},
+    doi = {10.5281/zenodo.7781855}
 }
 ```
 
